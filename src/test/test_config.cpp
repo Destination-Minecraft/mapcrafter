@@ -18,7 +18,7 @@
  */
 
 #include "../config/extended_ini.h"
-#include "../config/mapcrafter_config.h"
+#include "../config/validation.h"
 
 #include <iostream>
 #include <fstream>

@@ -20,7 +20,8 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
-#include "extended_ini.h"
+#include "config_map.h"
+#include "config_world.h"
 #include "validation.h"
 
 #include "../mc/worldcrop.h"
@@ -37,66 +38,6 @@ namespace fs = boost::filesystem;
 
 namespace mapcrafter {
 namespace config {
-
-class WorldSection {
-private:
-	bool global;
-
-	Field<fs::path> input_dir;
-	Field<std::string> world_name;
-
-	Field<int> min_y, max_y;
-	Field<int> min_x, max_x, min_z, max_z;
-	Field<int> center_x, center_z, radius;
-	mc::WorldCrop worldcrop;
-public:
-	WorldSection(bool global = false);
-	~WorldSection();
-
-	void setGlobal(bool global);
-	bool parse(const ConfigSection& section, const fs::path& config_dir, ValidationList& validation);
-
-	fs::path getInputDir() const;
-	std::string getWorldName() const;
-	const mc::WorldCrop getWorldCrop() const;
-	bool needsWorldCentering() const;
-};
-
-class MapSection {
-private:
-	bool global;
-
-	std::string name_short, name_long;
-	Field<std::string> world;
-
-	Field<fs::path> texture_dir;
-	Field<std::string> rotations;
-	std::set<int> rotations_set;
-	Field<std::string> rendermode;
-	Field<int> texture_size;
-
-	Field<bool> render_unknown_blocks, render_leaves_transparent, render_biomes, use_image_mtimes;
-public:
-	MapSection(bool global = false);
-	~MapSection();
-
-	void setGlobal(bool global);
-	bool parse(const ConfigSection& section, const fs::path& config_dir, ValidationList& validation);
-
-	std::string getShortName() const;
-	std::string getLongName() const;
-	std::string getWorld() const;
-
-	fs::path getTextureDir() const;
-	std::set<int> getRotations() const;
-	std::string getRendermode() const;
-	int getTextureSize() const;
-
-	bool renderUnknownBlocks() const;
-	bool renderLeavesTransparent() const;
-	bool renderBiomes() const;
-	bool useImageModificationTimes() const;
-};
 
 class MapcrafterConfigFile {
 private:
