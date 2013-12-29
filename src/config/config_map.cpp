@@ -25,19 +25,6 @@ namespace config {
 MapSection::MapSection(bool global)
 	: global(global), texture_size(12),  render_unknown_blocks(false),
 	  render_leaves_transparent(false), render_biomes(false) {
-}
-
-MapSection::~MapSection() {
-}
-
-void MapSection::setGlobal(bool global) {
-	this->global = global;
-}
-
-bool MapSection::parse(const ConfigSection& section, const fs::path& config_dir, ValidationList& validation) {
-	name_short = section.getName();
-	name_long = name_short;
-
 	// set some default configuration values
 	// check if we can find a default texture directory
 	bool has_default_textures = !util::findTextureDir().empty();
@@ -50,6 +37,18 @@ bool MapSection::parse(const ConfigSection& section, const fs::path& config_dir,
 	render_leaves_transparent.setDefault(true);
 	render_biomes.setDefault(true);
 	use_image_mtimes.setDefault(true);
+}
+
+MapSection::~MapSection() {
+}
+
+void MapSection::setGlobal(bool global) {
+	this->global = global;
+}
+
+bool MapSection::parse(const ConfigSection& section, const fs::path& config_dir, ValidationList& validation) {
+	name_short = section.getName();
+	name_long = name_short;
 
 	// go through all configuration options in this section
 	//   - load/parse the individual options

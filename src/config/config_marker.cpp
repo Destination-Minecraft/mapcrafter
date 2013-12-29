@@ -14,6 +14,7 @@ namespace config {
 
 MarkerSection::MarkerSection(bool global)
 	: global(global) {
+	title_format.setDefault("%text");
 }
 
 MarkerSection::~MarkerSection() {
@@ -25,8 +26,6 @@ void MarkerSection::setGlobal(bool global) {
 }
 
 bool MarkerSection::parse(const ConfigSection& section, ValidationList& validation) {
-	title_format.setDefault("%text");
-
 	auto entries = section.getEntries();
 	for (auto entry_it = entries.begin(); entry_it != entries.end(); ++entry_it) {
 		std::string key = entry_it->first;
