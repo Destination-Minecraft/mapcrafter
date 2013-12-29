@@ -1,6 +1,7 @@
 set(SOURCE
 	${SOURCE}
 	${CMAKE_CURRENT_SOURCE_DIR}/config_map.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/config_marker.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/config_world.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/config.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/extended_ini.cpp
@@ -11,6 +12,7 @@ set(SOURCE
 set(HEADERS
 	${HEADERS}
 	${CMAKE_CURRENT_SOURCE_DIR}/config_map.h
+	${CMAKE_CURRENT_SOURCE_DIR}/config_marker.h
 	${CMAKE_CURRENT_SOURCE_DIR}/config_world.h
 	${CMAKE_CURRENT_SOURCE_DIR}/config.h
 	${CMAKE_CURRENT_SOURCE_DIR}/extended_ini.h
