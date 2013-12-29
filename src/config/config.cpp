@@ -203,6 +203,13 @@ void dumpMapSection(std::ostream& out, const MapSection& section) {
 	out << "  use_image_timestamps = " << section.useImageModificationTimes() << std::endl;
 }
 
+void dumpMarkerSection(std::ostream& out, const MarkerSection& marker) {
+	out << "  prefix = " << marker.getPrefix() << std::endl;
+	out << "  title_format = " << marker.getTitleFormat() << std::endl;
+	out << "  text_format = " << marker.getTextFormat() << std::endl;
+	out << "  icon = " << marker.getIcon() << std::endl;
+}
+
 void MapcrafterConfigFile::dump(std::ostream& out) const {
 	out << "General:" << std::endl;
 	out << "  output_dir = " << output_dir.getValue().string() << std::endl;
@@ -217,6 +224,10 @@ void MapcrafterConfigFile::dump(std::ostream& out) const {
 	dumpMapSection(out, map_global);
 	out << std::endl;
 
+	out << "Global marker configuration" << std::endl;
+	dumpMarkerSection(out, marker_global);
+	out << std::endl;
+
 	for (auto it = worlds.begin(); it != worlds.end(); ++it) {
 		out << "World '" << it->first << "':" << std::endl;
 		dumpWorldSection(out, it->second);
@@ -226,6 +237,12 @@ void MapcrafterConfigFile::dump(std::ostream& out) const {
 	for (auto it = maps.begin(); it != maps.end(); ++it) {
 		out << "Map '" << it->getShortName() << "':" << std::endl;
 		dumpMapSection(out, *it);
+		out << std::endl;
+	}
+
+	for (auto it = markers.begin(); it != markers.end(); ++it) {
+		out << "Marker '" << it->first << "':" << std::endl;
+		dumpMarkerSection(out, it->second);
 		out << std::endl;
 	}
 }

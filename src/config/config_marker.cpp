@@ -49,6 +49,22 @@ bool MarkerSection::parse(const ConfigSection& section, ValidationList& validati
 	return true;
 }
 
+std::string MarkerSection::getPrefix() const {
+	return prefix.getValue();
+}
+
+std::string MarkerSection::getTitleFormat() const {
+	return title_format.getValue();
+}
+
+std::string MarkerSection::getTextFormat() const {
+	return title_format.getValue();
+}
+
+std::string MarkerSection::getIcon() const {
+	return icon.getValue();
+}
+
 bool MarkerSection::matchesSign(const mc::Sign& sign) const {
 	return util::startswith(sign.getText(), prefix.getValue());
 }

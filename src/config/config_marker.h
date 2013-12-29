@@ -24,6 +24,11 @@ public:
 	void setGlobal(bool global);
 	bool parse(const ConfigSection& section, ValidationList& validation);
 
+	std::string getPrefix() const;
+	std::string getTitleFormat() const;
+	std::string getTextFormat() const;
+	std::string getIcon() const;
+
 	bool matchesSign(const mc::Sign& sign) const;
 	std::string formatTitle(const mc::Sign& sign) const;
 	std::string formatText(const mc::Sign& sign) const;
