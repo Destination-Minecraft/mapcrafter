@@ -38,6 +38,8 @@ private:
 	Field<std::string> prefix;
 	Field<std::string> title_format, text_format;
 	Field<std::string> icon;
+
+	std::string formatSign(std::string format, const mc::Sign& sign) const;
 };
 
 } /* namespace config */

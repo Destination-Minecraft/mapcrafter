@@ -18,7 +18,22 @@ MarkerSection::MarkerSection(bool global)
 }
 
 MarkerSection::~MarkerSection() {
+}
 
+std::string MarkerSection::formatSign(std::string format, const mc::Sign& sign) const {
+	std::string textp = sign.getText();
+	std::string text;
+	if (textp.size() > prefix.getValue().size()) {
+		text = textp.substr(prefix.getValue().size()+1);
+		util::trim(text);
+	}
+	util::replaceAll(format, "%text", text);
+	util::replaceAll(format, "%textp", textp);
+	util::replaceAll(format, "%line0", sign.getLines()[0]);
+	util::replaceAll(format, "%line1", sign.getLines()[1]);
+	util::replaceAll(format, "%line2", sign.getLines()[2]);
+	util::replaceAll(format, "%line3", sign.getLines()[3]);
+	return format;
 }
 
 void MarkerSection::setGlobal(bool global) {
@@ -69,23 +84,11 @@ bool MarkerSection::matchesSign(const mc::Sign& sign) const {
 }
 
 std::string MarkerSection::formatTitle(const mc::Sign& sign) const {
-	std::string title = title_format.getValue();
-	util::replaceAll(title, "%text", sign.getText());
-	util::replaceAll(title, "%line0", sign.getLines()[0]);
-	util::replaceAll(title, "%line1", sign.getLines()[1]);
-	util::replaceAll(title, "%line2", sign.getLines()[2]);
-	util::replaceAll(title, "%line3", sign.getLines()[3]);
-	return title;
+	return formatSign(title_format.getValue(), sign);
 }
 
 std::string MarkerSection::formatText(const mc::Sign& sign) const {
-	std::string text = text_format.getValue();
-	util::replaceAll(text, "%text", sign.getText());
-	util::replaceAll(text, "%line0", sign.getLines()[0]);
-	util::replaceAll(text, "%line1", sign.getLines()[1]);
-	util::replaceAll(text, "%line2", sign.getLines()[2]);
-	util::replaceAll(text, "%line3", sign.getLines()[3]);
-	return text;
+	return formatSign(text_format.getValue(), sign);
 }
 
 } /* namespace config */
