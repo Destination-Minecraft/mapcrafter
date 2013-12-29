@@ -58,7 +58,7 @@ bool MarkerSection::parse(const ConfigSection& section, ValidationList& validati
 		}
 	}
 
-	text_format.setDefault("%text");
+	text_format.setDefault(title_format.getValue());
 
 	return true;
 }
