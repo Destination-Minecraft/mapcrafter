@@ -74,6 +74,10 @@ void World::setWorldCrop(const WorldCrop& worldcrop) {
 	this->worldcrop = worldcrop;
 }
 
+const WorldCrop& World::getWorldCrop() const {
+	return worldcrop;
+}
+
 bool World::load(const std::string& dir) {
 	fs::path world_dir(dir);
 	fs::path region_dir = world_dir / "region";

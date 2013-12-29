@@ -63,9 +63,10 @@ public:
 	void setRotation(int rotation);
 
 	/**
-	 * Sets the boundaries of the world.
+	 * Sets/Gets the boundaries of the world.
 	 */
 	void setWorldCrop(const WorldCrop& worldcrop);
+	const WorldCrop& getWorldCrop() const;
 
 	/**
 	 * Loads a world from a directory. Returns false if the world- or region directory

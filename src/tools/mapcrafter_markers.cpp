@@ -34,17 +34,24 @@ int main(int argc, char** argv) {
 	auto worlds = parser.getWorlds();
 	auto markers = parser.getMarkers();
 	for (auto world_it = worlds.begin(); world_it != worlds.end(); ++world_it) {
+		mc::WorldCrop worldcrop = world_it->second.getWorldCrop();
 		mc::World world;
+		world.setWorldCrop(worldcrop);
 		if (!world.load(world_it->second.getInputDir().string())) {
 			std::cerr << "Error: Unable to load world " << world_it->first << "!" << std::endl;
 			continue;
 		}
 
 		std::vector<mc::Sign> signs = mc::findSignsInWorld(world);
-		for (auto sign_it = signs.begin(); sign_it != signs.end(); ++sign_it)
+		for (auto sign_it = signs.begin(); sign_it != signs.end(); ++sign_it) {
+			// don't use signs not contained in the world boundaries
+			if (!worldcrop.isBlockContainedXZ(sign_it->getPos())
+					&& !worldcrop.isBlockContainedY(sign_it->getPos()))
+				continue;
 			for (auto marker_it = markers.begin(); marker_it != markers.end(); ++marker_it) {
 				if (marker_it->second.matchesSign(*sign_it))
 					std::cout << marker_it->second.formatText(*sign_it) << std::endl;
 			}
+		}
 	}
 }
