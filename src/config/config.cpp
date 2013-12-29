@@ -28,7 +28,7 @@ namespace mapcrafter {
 namespace config {
 
 MapcrafterConfigFile::MapcrafterConfigFile()
-	: world_global(true), map_global(true) {
+	: world_global(true), map_global(true), marker_global(true) {
 }
 
 MapcrafterConfigFile::~MapcrafterConfigFile() {
@@ -100,12 +100,22 @@ bool MapcrafterConfigFile::parse(const std::string& filename, ValidationMap& val
 			return false;
 	}
 
+	if (config.hasSection("global", "marker")) {
+		ValidationList msgs;
+		ok = marker_global.parse(config.getSection("global", "markers"), msgs) && ok;
+		if (!msgs.empty())
+			validation.push_back(std::make_pair("Global marker configuration", msgs));
+		if (!ok)
+			return false;
+	}
+
 	auto sections = config.getSections();
 
 	for (auto it = sections.begin(); it != sections.end(); ++it)
-		if (it->getType() != "world" && it->getType() != "map"
+		if (it->getType() != "world" && it->getType() != "map" && it->getType() != "marker"
 				&& it->getNameType() != "global:worlds"
-				&& it->getNameType() != "global:maps") {
+				&& it->getNameType() != "global:maps"
+				&& it->getNameType() != "global:markers") {
 			validation.push_back(std::make_pair("Section '" + it->getName() + "' with type '" + it->getType() + "'",
 					makeValidationList(ValidationMessage::warning("Unknown section type!"))));
 		}
@@ -147,6 +157,21 @@ bool MapcrafterConfigFile::parse(const std::string& filename, ValidationMap& val
 
 		if (!msgs.empty())
 			validation.push_back(std::make_pair("Map section '" + it->getName() + "'", msgs));
+	}
+
+	for (auto it = sections.begin(); it != sections.end(); ++it) {
+		if (it->getType() != "marker")
+			continue;
+		ValidationList msgs;
+		MarkerSection marker = marker_global;
+		marker.setGlobal(false);
+		ok = marker.parse(*it, msgs) && ok;
+
+		if (hasMarker(it->getName())) {
+			msgs.push_back(ValidationMessage::error("Marker name '" + it->getName() + "' already used!"));
+			ok = false;
+		} else
+			markers[it->getName()] = marker;
 	}
 
 	return ok;
@@ -252,6 +277,14 @@ const MapSection& MapcrafterConfigFile::getMap(const std::string& map) const {
 		if (it->getShortName() == map)
 			return *it;
 	throw std::out_of_range("Map not found!");
+}
+
+bool MapcrafterConfigFile::hasMarker(const std::string& marker) const {
+	return markers.count(marker);
+}
+
+const std::map<std::string, MarkerSection>& MapcrafterConfigFile::getMarkers() const {
+	return markers;
 }
 
 MapcrafterConfigHelper::MapcrafterConfigHelper() {
