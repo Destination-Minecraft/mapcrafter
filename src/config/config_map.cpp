@@ -27,8 +27,7 @@ MapSection::MapSection(bool global)
 	  render_leaves_transparent(false), render_biomes(false) {
 	// set some default configuration values
 	// check if we can find a default texture directory
-	bool has_default_textures = !util::findTextureDir().empty();
-	if (has_default_textures)
+	if (!util::findTextureDir().empty())
 		texture_dir.setDefault(util::findTextureDir());
 	rotations.setDefault("top-left");
 	rendermode.setDefault("daylight");
@@ -117,9 +116,7 @@ bool MapSection::parse(const ConfigSection& section, const fs::path& config_dir,
 	// check if required options were specified
 	if (!global) {
 		world.require(validation, "You have to specify a world ('world')!");
-		// a texture directory is only required
-		// if mapcrafter can not find a default texture directory
-		if (!has_default_textures)
+		if (!texture_dir.isLoaded())
 			texture_dir.require(validation, "You have to specify a texture directory ('texture_dir')!");
 	}
 
