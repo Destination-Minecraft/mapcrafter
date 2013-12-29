@@ -1,11 +1,30 @@
 #include <vector>
 
+#include "../util.h"
 #include "../config/config.h"
 #include "../mc/world.h"
 #include "../mc/worldhelper.h"
 
+#include <string>
+#include <vector>
+#include <map>
+
+namespace util = mapcrafter::util;
 namespace config = mapcrafter::config;
 namespace mc = mapcrafter::mc;
+
+struct Marker {
+	mc::BlockPos pos;
+	std::string title, text;
+
+	std::string toJSON() {
+		std::string json = "{";
+		json += "\"pos\": [" + util::str(pos.x) + "," + util::str(pos.z) + "," + util::str(pos.y) + "], ";
+		json += "\"title\": \"" + title + "\", ";
+		json += "\"text\": \"" + text + "\", ";
+		return json + "}";
+	}
+};
 
 int main(int argc, char** argv) {
 	if (argc < 2) {
@@ -20,16 +39,17 @@ int main(int argc, char** argv) {
 	bool ok = parser.parse(configfile, validation);
 
 	if (validation.size() > 0) {
-		std::cerr << (ok ? "Some notes on your configuration file:" : "Your configuration file is invalid!") << std::endl;
+		std::cerr << (ok ? "Some notes on your configuration file:"
+				: "Your configuration file is invalid!") << std::endl;
 		for (auto it = validation.begin(); it != validation.end(); ++it) {
 			std::cerr << it->first << ":" << std::endl;
 			for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
 				std::cerr << " - " << *it2 << std::endl;
 			}
 		}
-	} else {
-		std::cerr << "Everything ok." << std::endl;
 	}
+
+	std::map<std::string, std::vector<Marker>> markers_generated;
 
 	auto worlds = parser.getWorlds();
 	auto markers = parser.getMarkers();
@@ -49,9 +69,27 @@ int main(int argc, char** argv) {
 					&& !worldcrop.isBlockContainedY(sign_it->getPos()))
 				continue;
 			for (auto marker_it = markers.begin(); marker_it != markers.end(); ++marker_it) {
-				if (marker_it->second.matchesSign(*sign_it))
-					std::cout << marker_it->second.formatText(*sign_it) << std::endl;
+				if (!marker_it->second.matchesSign(*sign_it))
+					continue;
+				Marker marker;
+				marker.pos = sign_it->getPos();
+				marker.title = marker_it->second.formatTitle(*sign_it);
+				marker.text = marker_it->second.formatText(*sign_it);
+				markers_generated[world_it->second.getWorldName()].push_back(marker);
 			}
 		}
 	}
+
+	std::cout << "MARKERS = {" << std::endl;
+	for (auto world_it = markers_generated.begin(); world_it != markers_generated.end();
+			++world_it) {
+		std::cout << "  \"" << world_it->first << "\": [" << std::endl;
+
+		auto markers = world_it->second;
+		for (auto marker_it = markers.begin(); marker_it != markers.end(); ++marker_it)
+			std::cout << "    " << marker_it->toJSON() << "," << std::endl;
+
+		std::cout << "  ]," << std::endl;
+	}
+	std::cout << "};" << std::endl;
 }
