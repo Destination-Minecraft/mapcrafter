@@ -28,6 +28,7 @@ public:
 	std::string getTitleFormat() const;
 	std::string getTextFormat() const;
 	std::string getIcon() const;
+	std::string getIconSize() const;
 
 	bool matchesSign(const mc::Sign& sign) const;
 	std::string formatTitle(const mc::Sign& sign) const;
@@ -37,7 +38,7 @@ private:
 
 	Field<std::string> prefix;
 	Field<std::string> title_format, text_format;
-	Field<std::string> icon;
+	Field<std::string> icon, icon_size;
 
 	std::string formatSign(std::string format, const mc::Sign& sign) const;
 };

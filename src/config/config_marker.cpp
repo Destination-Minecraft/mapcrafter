@@ -52,6 +52,10 @@ bool MarkerSection::parse(const ConfigSection& section, ValidationList& validati
 			title_format.load(key, value, validation);
 		else if (key == "text_format")
 			text_format.load(key, value, validation);
+		else if (key == "icon")
+			icon.load(key, value, validation);
+		else if (key == "icon_size")
+			icon_size.load(key, value, validation);
 		else {
 			validation.push_back(ValidationMessage::warning(
 					"Unknown configuration option '" + key + "'!"));
@@ -77,6 +81,10 @@ std::string MarkerSection::getTextFormat() const {
 
 std::string MarkerSection::getIcon() const {
 	return icon.getValue();
+}
+
+std::string MarkerSection::getIconSize() const {
+	return icon_size.getValue();
 }
 
 bool MarkerSection::matchesSign(const mc::Sign& sign) const {

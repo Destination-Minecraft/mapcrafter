@@ -16,12 +16,18 @@ namespace mc = mapcrafter::mc;
 struct Marker {
 	mc::BlockPos pos;
 	std::string title, text;
+	std::string icon, icon_size;
 
 	std::string toJSON() {
 		std::string json = "{";
 		json += "\"pos\": [" + util::str(pos.x) + "," + util::str(pos.z) + "," + util::str(pos.y) + "], ";
 		json += "\"title\": \"" + title + "\", ";
 		json += "\"text\": \"" + text + "\", ";
+		if (!icon.empty()) {
+			json += "\"icon\": \"" + icon + "\", ";
+			if (!icon_size.empty())
+				json += "\"icon_size\": " + icon_size + ", ";
+		}
 		return json + "}";
 	}
 };
@@ -75,6 +81,8 @@ int main(int argc, char** argv) {
 				marker.pos = sign_it->getPos();
 				marker.title = marker_it->second.formatTitle(*sign_it);
 				marker.text = marker_it->second.formatText(*sign_it);
+				marker.icon = marker_it->second.getIcon();
+				marker.icon_size = marker_it->second.getIconSize();
 				markers_generated[world_it->second.getWorldName()].push_back(marker);
 			}
 		}
