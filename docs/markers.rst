@@ -78,7 +78,7 @@ Here are all available options for the markers:
 	directory of the template and then use them with something
 	like ``icons/myicon.png``.
 
-``iconsize``
+``icon_size``
 
 	**Default:** ``[24, 24]`` (if an icon is specified)
 
