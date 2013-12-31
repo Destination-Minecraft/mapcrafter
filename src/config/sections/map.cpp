@@ -17,7 +17,7 @@
  * along with mapcrafter.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config_map.h"
+#include "map.h"
 
 namespace mapcrafter {
 namespace config {

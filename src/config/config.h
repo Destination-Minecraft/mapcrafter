@@ -20,9 +20,9 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
-#include "config_map.h"
-#include "config_world.h"
-#include "config_marker.h"
+#include "sections/marker.h"
+#include "sections/map.h"
+#include "sections/world.h"
 #include "validation.h"
 
 #include "../render/tileset.h"

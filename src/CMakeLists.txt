@@ -57,6 +57,7 @@ set(HEADERS
 
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/util")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/config")
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/config/sections")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/mc")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/render")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/render/rendermodes")
